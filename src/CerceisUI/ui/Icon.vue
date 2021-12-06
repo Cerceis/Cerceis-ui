@@ -1,0 +1,46 @@
+<template>
+	<img :width="dimension" :src="iconPath">
+</template>
+ 
+<script lang="ts">
+import { defineComponent, PropType} from "vue";
+
+type dimension = "xs" | "sm" | "md" | "lg" 
+interface AvartarDimension{
+	"xs": string,
+	"sm": string,
+	"md": string,
+	"lg": string
+}
+ 
+export default defineComponent({
+	props:{
+		name:{
+			type: String,
+			required: true,
+		},
+		size:{
+			type: String as PropType<dimension>,
+			default: "md"
+		}
+	},
+	setup(props) {
+		const dimension: AvartarDimension = {
+			"xs": "16",
+			"sm": "32",
+			"md": "48",
+			"lg": "64",
+		}	
+		const filename: string = props.name
+		let iconPath: string = require(`../icons/${filename}.svg`)
+		return {
+			iconPath,
+			dimension: dimension[props.size],
+		}
+	},
+});
+</script>
+ 
+<style lang="scss" scoped>
+ 
+</style>
