@@ -11,6 +11,8 @@ import Table from "./ui/Table/Table.vue"
 import Select from "./ui/Select.vue"
 import LoaderLinear from "./ui/LoaderLinear.vue"
 import FloatPanel from "./ui/FloatPanel.vue"
+import Sidebar from "./ui/Sidebar.vue"
+import Dialog from "./ui/Dialog.vue"
 //Styles
 import "./css/globalStyle.css"
 import "./css/theme.css"
@@ -39,5 +41,7 @@ export default {
 		app.component("c-select", Select);
 		app.component("c-loader-linear", LoaderLinear);
 		app.component("c-float", FloatPanel);
+		app.component("c-sidebar", Sidebar);
+		app.component("c-dialog", Dialog);
 	}
 }

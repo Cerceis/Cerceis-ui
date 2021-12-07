@@ -4,6 +4,8 @@ html, body{
 }
 body{
 	background-color:var(--bg);
+	color:var(--text);
+	font-family: Verdana, sans-serif;
 }
 
 .rounded{
