@@ -6,7 +6,7 @@
  
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { RandomInt } from "lib/RandomInt/random-int"
+import { RandomInt } from "lib/RandomInt/random-int";
 
 type dimension = "sm" | "md" | "lg" 
 interface AvartarDimension{

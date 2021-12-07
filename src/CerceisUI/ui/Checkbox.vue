@@ -1,5 +1,5 @@
 <template>
-	<div class="checkboxContainer">
+	<span class="checkboxContainer">
 		<span class="innerWarp">
 			<input :id="id" type="checkbox" v-model="model" :value="value" />
 			<label :for="id">
@@ -8,7 +8,7 @@
 				<ins><i :style="labelStyle">{{ label }}</i></ins>
 		</label>
 		</span>
-	</div>
+	</span>
 </template>
  
 <script lang="ts">
@@ -29,7 +29,7 @@ export default defineComponent({
             type: null,
         },
         modelValue: {
-            type: Array,
+            type: [Array, Boolean],
         },
     },
     setup(props, { emit }) {

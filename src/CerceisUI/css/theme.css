@@ -1,0 +1,21 @@
+:root {
+	--bg: #ffffff;
+	--text: #000000;
+	--primary: #779ecb;
+	--secondary: #C98686;
+	--accent: #F2B880;
+	--success: #03c03c;
+	--error: #ff6961;
+	--warning: #FFB449;
+}
+
+[data-theme="dark"] {
+	--bg: #373737;
+	--text: #ffffff;
+	--primary: #779ecb;
+	--secondary: #C98686;
+	--accent: #F2B880;
+	--success: #03c03c;
+	--error: #ff6961;
+	--warning: #FFB449;
+}

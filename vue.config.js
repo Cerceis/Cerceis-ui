@@ -4,8 +4,7 @@ module.exports = {
 	configureWebpack: {
 		resolve: {
 			alias: {
-				"lib": "/Users/haurucerceis/LocalData/LIB",
-				"vlib": "/Users/haurucerceis/LocalData/VUE/cerceislib/modules"
+				"lib": "/Users/haur/Desktop/Dev/LIB"
 			},
 		}
 	},

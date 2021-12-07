@@ -1,14 +1,26 @@
 <template>
-    <div class="containerStyle">
+    <div :class="containerClass">
         <slot />
     </div>
 </template>
  
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 
 export default defineComponent({
-    setup(){
+    props:{
+        flat:{
+            type: Boolean,
+            default: false
+        }
+    },
+    setup(props){
+        
+        const containerClass: Ref<string> = ref("containerStyle shadow")
+        if(props.flat) containerClass.value = "containerStyle";
+        return{
+            containerClass
+        }
 	},
 });
 </script>

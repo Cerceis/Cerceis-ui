@@ -11,16 +11,19 @@ import Table from "./ui/Table/Table.vue"
 import Select from "./ui/Select.vue"
 import LoaderLinear from "./ui/LoaderLinear.vue"
 import FloatPanel from "./ui/FloatPanel.vue"
+//Styles
+import "./css/globalStyle.css"
+import "./css/theme.css"
 /* 
 options:{
 	iconAssetPath: <String>: Should be absolute path to icon folder
 }
 */
-export interface CerceisUIOptions{
+export interface CerceisUIOptions {
 	iconAssetPath?: String
 }
 
-export default{
+export default {
 	install: (app: any, options: CerceisUIOptions = {}) => {
 		app.config.globalProperties.cIconAssetPath = options.iconAssetPath ? options.iconAssetPath : "";
 		app.component("c-icon", Icon);

@@ -3,7 +3,7 @@
 </template>
  
 <script lang="ts">
-import { defineComponent, PropType} from "vue";
+import { defineComponent, PropType, computed, ComputedRef } from "vue";
 
 type dimension = "xs" | "sm" | "md" | "lg" 
 interface AvartarDimension{
@@ -31,8 +31,11 @@ export default defineComponent({
 			"md": "48",
 			"lg": "64",
 		}	
-		const filename: string = props.name
-		let iconPath: string = require(`../icons/${filename}.svg`)
+		const iconPath: ComputedRef<string> = computed(()=>{
+			const filename: string = props.name
+			return require(`../icons/${filename}.svg`)
+		})
+		
 		return {
 			iconPath,
 			dimension: dimension[props.size],
