@@ -2,7 +2,7 @@
     <slot name="activator" :open="toggleSidebar"></slot>
     <div v-if="panelOpen" class="overlay"></div>
     <div ref="panelContainer" :style="sidebarStyle" class="sidebarContainer shadow" tabindex="-1" @blur="toggleSidebar">
-        
+        <slot name="content" />
     </div>
 </template>
  
@@ -12,7 +12,6 @@ import { defineComponent, PropType, computed, ComputedRef, ref, Ref } from "vue"
 export type pos = "left" | "top" | "bottom" | "right"
 //There's still bug on toggling panel when you click the button twice.
 //But otherwise, using blur as closing signal, everything should work fine.
-
 export default defineComponent({
     props:{
         pos:{
@@ -21,59 +20,57 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const panelContainer: Ref<any> = ref(null);
+        const panelContainer: Ref<HTMLElement | null> = ref(null);
         const panelOpen: Ref<boolean> = ref(false);
-        const panelwidth: Ref<number> = ref(0);
-        const panelHeight: Ref<number> = ref(0);
+        const panelPos: Ref<number> = ref(0);
+        const currentPanelWidth: ComputedRef<number> = computed(()=>{
+            if(panelContainer.value)
+                return panelContainer.value.getBoundingClientRect().width
+            return 0
+        })
+
         const sidebarStyle: ComputedRef<{}> = computed(()=>{
+            if(panelOpen.value)
+                panelPos.value = 0;
+            else
+                panelPos.value = -currentPanelWidth.value;
             switch(props.pos){
                 case "right":
-                    panelHeight.value = 100;
                     return {
                         top: "0",
-                        right: "0",
-                        width: `${panelwidth.value}vw`,
-                        height: `${panelHeight.value}vh`
+                        right: `${panelPos.value}px`,
+                        height: `100vh`
                     }
                 case "top":
-                    panelwidth.value = 100;
                     return {
-                        top: "0",
+                        top: `${panelPos.value}px`,
                         left: "0",
-                        height: `${panelHeight.value}vh`,
-                        width: `${panelwidth.value}vw`,
+                        width: `100vw`,
                     }
                 case "bottom":
-                    panelwidth.value = 100;
                     return {
-                        bottom: "0",
+                        bottom: `${panelPos.value}px`,
                         left: "0",
-                        height: `${panelHeight.value}vh`,
-                        width: `${panelwidth.value}vw`,
+                        width: `100vw`,
                     }
                 default:
-                    panelHeight.value = 100;
                     return {
                         top: "0",
-                        left: "0",
-                        width: `${panelwidth.value}vw`,
-                        height: `${panelHeight.value}vh`
+                        left: `${panelPos.value}px`,
+                        height: `100vh`
                     }
             }
         })
 
         const toggleSidebar = (): void => {
-
-            if(panelOpen.value){//Open
-                panelwidth.value = 0;
+            if(panelOpen.value){//While Opened
                 panelOpen.value = false;
             }
-            else{ //Closed
-                panelwidth.value = 20;
-                panelContainer.value.focus();
+            else{ //While Closed
+                if(panelContainer.value)
+                    panelContainer.value.focus();
                 panelOpen.value = true;
-            }
-                
+            }    
         }
 
         return{
@@ -90,7 +87,8 @@ export default defineComponent({
 .sidebarContainer{
     position: fixed;
     background-color: var(--bg);
-    transition: all .4s;
+    transition: all .2s;
+    padding:1em;
 }
 .overlay{
     position: fixed;

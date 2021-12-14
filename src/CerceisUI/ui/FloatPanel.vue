@@ -14,6 +14,7 @@
 </template>
  
 <script lang="ts">
+//FLatPanel = tooltips
 import { defineComponent, Ref, ref, PropType, computed, ComputedRef } from "vue";
 
 export interface FloatContentStyle {

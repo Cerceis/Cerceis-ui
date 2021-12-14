@@ -13,6 +13,7 @@ import LoaderLinear from "./ui/LoaderLinear.vue"
 import FloatPanel from "./ui/FloatPanel.vue"
 import Sidebar from "./ui/Sidebar.vue"
 import Dialog from "./ui/Dialog.vue"
+import ChipGroup from "./ui/ChipGroup/ChipGroup.vue"
 //Styles
 import "./css/globalStyle.css"
 import "./css/theme.css"
@@ -43,5 +44,7 @@ export default {
 		app.component("c-float", FloatPanel);
 		app.component("c-sidebar", Sidebar);
 		app.component("c-dialog", Dialog);
+		app.component("c-chip-group", ChipGroup);
+		
 	}
 }
