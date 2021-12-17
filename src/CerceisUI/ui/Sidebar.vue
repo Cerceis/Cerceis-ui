@@ -1,8 +1,8 @@
 <template>
     <slot name="activator" :open="toggleSidebar"></slot>
-    <div v-if="panelOpen" class="overlay"></div>
-    <div ref="panelContainer" :style="sidebarStyle" class="sidebarContainer shadow" tabindex="-1" @blur="toggleSidebar">
-        <slot name="content" />
+    <div v-if="panelOpen" class="overlay" @click="toggleSidebar"></div>
+    <div ref="panelContainer" :style="sidebarStyle" class="sidebarContainer shadow">
+        <slot name="content" :toggle="toggleSidebar" />
     </div>
 </template>
  
@@ -89,6 +89,7 @@ export default defineComponent({
     background-color: var(--bg);
     transition: all .2s;
     padding:1em;
+    z-index: 999;
 }
 .overlay{
     position: fixed;
@@ -98,5 +99,6 @@ export default defineComponent({
     width: 100vw;
     background-color: black;
     opacity: .3;
+    z-index: 998;
 }
 </style>

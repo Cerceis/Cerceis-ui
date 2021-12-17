@@ -1,4 +1,5 @@
-import Icon from "./ui/Icon.vue"
+import { provide } from 'vue';
+import Icon from "./ui/Icon/Icon.vue"
 import Container from "./ui/Container.vue"
 import Button from "./ui/Button.vue"
 import Input from "./ui/Input.vue"
@@ -10,10 +11,12 @@ import Checkbox from "./ui/Checkbox.vue"
 import Table from "./ui/Table/Table.vue"
 import Select from "./ui/Select.vue"
 import LoaderLinear from "./ui/LoaderLinear.vue"
-import FloatPanel from "./ui/FloatPanel.vue"
+import FloatPanel from "./ui/FloatPanel/FloatPanel.vue"
 import Sidebar from "./ui/Sidebar.vue"
-import Dialog from "./ui/Dialog.vue"
+import Dialog from "./ui/Dialog/Dialog.vue"
 import ChipGroup from "./ui/ChipGroup/ChipGroup.vue"
+import * as notification from "./ui/Notification/NotificationService"
+import Notification from "./ui/Notification/Notification.vue"
 //Styles
 import "./css/globalStyle.css"
 import "./css/theme.css"
@@ -25,7 +28,6 @@ options:{
 export interface CerceisUIOptions {
 	iconAssetPath?: String
 }
-
 export default {
 	install: (app: any, options: CerceisUIOptions = {}) => {
 		app.config.globalProperties.cIconAssetPath = options.iconAssetPath ? options.iconAssetPath : "";
@@ -45,6 +47,7 @@ export default {
 		app.component("c-sidebar", Sidebar);
 		app.component("c-dialog", Dialog);
 		app.component("c-chip-group", ChipGroup);
-		
+		app.component("c-notification", Notification);
+		app.provide('notificationService', notification);
 	}
 }

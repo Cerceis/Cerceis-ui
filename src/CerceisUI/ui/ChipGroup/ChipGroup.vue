@@ -1,9 +1,18 @@
 <template>
-    <div class="chipGroupContainer">
+    <div class="flex gap-1">
         <slot v-for="(label, i) in filteredItems.displayList" :key=i name=chip :label="label">
         </slot>
-        <slot v-if="filteredItems.remainingList.length >= 0" name=chip :remain="filteredItems.remainingList.length">
-        </slot>
+        <c-float v-if="filteredItems.remainingList.length >= 0" pos="right">
+            <template v-slot:activator="{open}">
+                <slot name=chip :remain="filteredItems.remainingList.length" :open=open>
+                </slot>
+            </template>
+            <template v-slot:content>
+                <slot name=remainContent :remainList="filteredItems.remainingList">
+                </slot>
+            </template>
+        </c-float>
+        
     </div>
 </template>
  
@@ -42,9 +51,4 @@ export default defineComponent({
 </script>
  
 <style lang="scss" scoped>
-.chipGroupContainer{
-    display:flex;
-
-    gap:.5em;
-}
 </style>

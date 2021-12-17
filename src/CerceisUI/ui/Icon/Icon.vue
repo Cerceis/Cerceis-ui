@@ -5,8 +5,8 @@
 <script lang="ts">
 import { defineComponent, PropType, computed, ComputedRef } from "vue";
 
-type dimension = "xs" | "sm" | "md" | "lg" 
-interface AvartarDimension{
+export type IconSize = "xs" | "sm" | "md" | "lg" 
+export interface IconDimension{
 	"xs": string,
 	"sm": string,
 	"md": string,
@@ -17,23 +17,31 @@ export default defineComponent({
 	props:{
 		name:{
 			type: String,
-			required: true,
+			default: ""
 		},
 		size:{
-			type: String as PropType<dimension>,
+			type: String as PropType<IconSize>,
 			default: "md"
+		},
+		setSrc:{ //Set src if available
+			type: String,
+			default: null
 		}
 	},
 	setup(props) {
-		const dimension: AvartarDimension = {
-			"xs": "16",
+		const dimension: IconDimension = {
+			"xs": "24",
 			"sm": "32",
 			"md": "48",
 			"lg": "64",
 		}	
 		const iconPath: ComputedRef<string> = computed(()=>{
 			const filename: string = props.name
-			return require(`../icons/${filename}.svg`)
+			return (
+				props.setSrc ?
+				props.setSrc :
+				require(`../../icons/${filename}.svg`)
+			)
 		})
 		
 		return {

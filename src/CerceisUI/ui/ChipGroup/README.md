@@ -10,21 +10,34 @@ A component that display a list of chips, which can be configured to show max am
 - **items**: string[]: default = []: Array of strings.
 - **max**: number: default = 3: Max numbers of chip display.
 
-## Types/Interfaces
+## Types / Interfaces
 - **FilteredItems** [Interface]: The data structure after filtering max numbers of element. Consist of 2 list, displayList as list of element to display, remainingList as list of element to hide and show when needed.
 
+## Slots
+- chip: Slot that lets you style your chip.
+    - ### SlotProps
+        - label: string: Label of the chip.
+        - remain: number: Number of hidden element.
+        - remainList: string[]: List of remaining label that is hidden.
 
 ## Examples
 ```
-<c-chip-group :items="['Apple', 'Orange', 'Melon', 'Banana']">
-    <template v-slot:chip="{label, remain}">
-        <c-btn chip size="sm">
-            {{
-                label ? 
-                label:
-                `+${remain}`
-            }}
+<c-chip-group :items="['Apple', 'Orange', 'Melon', 'Banana', 'Lemon']">
+    <template v-slot:chip="{label, remain, open}">
+        <c-btn v-if="label" chip size="sm">
+            {{label}}
         </c-btn>
+        <c-btn v-else flat size="sm" @click="open">
+            {{`他+${remain}`}}
+        </c-btn>
+    </template>
+    <template v-slot:remainContent="{remainList}">
+        <c-container>
+            <div v-for="label in remainList" :key=label>
+                {{label}}
+                <c-divider />
+            </div>
+        </c-container>
     </template>
 </c-chip-group>
 ```

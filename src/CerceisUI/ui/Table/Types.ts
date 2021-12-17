@@ -14,6 +14,20 @@ export interface ApiOptions{
 	url:string,
 	next:string
 	previous:string
-	count:string,
+	count:number,
 	results:string
+}
+
+export interface ApiInfo{
+	fixedUrl: string,
+	baseUrl: string,
+	count: number,
+	nextUrl: string | null,
+	previousUrl: string | null
+}
+
+export interface ApiParams{
+	limit: number,
+	offset: number,
+	search: string
 }

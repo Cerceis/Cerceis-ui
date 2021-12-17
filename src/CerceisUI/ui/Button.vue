@@ -25,7 +25,7 @@ export default defineComponent({
         },
         size: {
             type: String,
-            default: "md",
+            default: "sm",
         },
         flat: {
             type: Boolean,
@@ -65,7 +65,7 @@ export default defineComponent({
     border-radius: 0.25rem;
     cursor: pointer;
 	&:active{
-		background-color: #9e9e9e !important;
+		background-color: var(--activate)
 	}
 }
 .chip{

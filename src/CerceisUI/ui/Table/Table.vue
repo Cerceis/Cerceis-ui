@@ -1,12 +1,18 @@
 <template>
     <div class="tableContainer" :style="localCssProps">
-        <slot name="top" />
-        <table>
-            <tr>
-                <th v-for="(header, headerIndex) in headers" :key=headerIndex>
+        <slot name="top" :search="searchHandle"/>
+		<div v-if="mobileMode">
+			<slot name="mobile"
+				v-for="(item, itemIndex) in displayItems" :key=itemIndex 
+				:item=item
+			/>
+		</div>
+		<table v-else>
+			<tr>
+				<th v-for="(header, headerIndex) in headers" :key=headerIndex>
 					<c-btn size="sm" @click="sortAs(header.value)" :color="localCssProps.mainColor">
-                    {{ header.label }}
-                    <span 
+					{{ header.label }}
+					<span 
 						v-if="isDataTable" 
 						:class="
 							sortState[header.value] === 'non' ? 'bar' :
@@ -16,19 +22,19 @@
 						"
 					></span>
 					</c-btn>
-                </th>
+				</th>
 				<th v-if="slotExist['actions']"></th>
-            </tr>
+			</tr>
 
 			<tr v-for="(item, itemIndex) in displayItems" :key=itemIndex>
 				<td v-for="(header, headerIndex) in headers" :key=headerIndex>
 					<template v-if="slotExist[header.value]">
-						<slot :name="header.value" :item=item />
+						<slot :name="header.value" :item=item :index="itemIndex+(currentPage*itemPerPageModel)" />
 					</template>
 					<template v-else>
 						{{item[header.value]}}
 					</template>
-                </td>
+				</td>
 				<td v-if="slotExist['actions']">
 					<slot name="actions" :item=item />
 				</td>
@@ -38,7 +44,7 @@
 					<c-loader-linear style="width:100%" :color="localCssProps.mainColor" />
 				</td>
 			</tr>
-        </table>
+		</table>
 		<div v-if="isDataTable" class="footer">
 			<c-select v-model="itemPerPageModel" :options="itemPerPage" style="width:75px;">	
 			</c-select>
@@ -59,18 +65,28 @@
  
 <script lang="ts">
 
-import { defineComponent, computed, Ref, ref, ComputedRef, watch, onMounted } from "vue";
+import { defineComponent, computed, Ref, ref, ComputedRef, watch, onMounted, onUnmounted } from "vue";
 import { Props } from "./Props";
+import { ApiParams, ApiInfo } from "./Types"
+
+//During ApiMode, search does not work
 
 export default defineComponent({
     props: Props,
     setup(props, { slots }) {
+		//MobileMode
+		const windowWidth = ref(window.screen.width);
+		const mobileMode: ComputedRef<boolean> = computed(()=>{
+			return windowWidth.value <= props.mobileBreakPoint ? true : false
+		})
+		const onWidthChange = (): void => {windowWidth.value = window.screen.width}
+		onMounted(() => window.addEventListener('resize', onWidthChange))
+  		onUnmounted(() => window.removeEventListener('resize', onWidthChange))
 		//Check if slots exists
 		let slotExist: any = {};
 		Object.keys(slots).forEach(slot => {
 			slotExist[slot] = true;
 		})
-
         //Styles
         const localCssProps = computed(() => {
             return {
@@ -78,7 +94,6 @@ export default defineComponent({
 				"mainColor": props.color,
             };
         });
-
 		//itemPerPage
 		//Set a default pagination modelValue
 		const loading: Ref<boolean> = ref(false);
@@ -86,18 +101,25 @@ export default defineComponent({
 		const totalItems: Ref<number> = ref(0);
 		const currentPage: Ref<number> = ref(0);
 		const items: Ref<any[]> = ref(props.items);
-		const linkToNextSetOfData: Ref<string> = ref("");
 		//Reset page value then user changes the display option
-		watch(itemPerPageModel, () => {
+		watch(itemPerPageModel, async() => {
 			currentPage.value = 0;
+			if(apiMode.value){
+				items.value = [];
+				loadedPage.value.clear();
+				await processApi()
+			}
 		})
 		const totalPages: ComputedRef<number> = computed((): number =>{
 			if(itemPerPageModel.value === -1) return 1;
+			if(apiMode.value) return Math.ceil(apiInfo.value.count/apiParams.value.limit)
 			return Math.ceil(totalItems.value/itemPerPageModel.value);
 		})
 		//Filter items accordign to page
-		const displayItems: ComputedRef<any[]> = computed((): any[] =>{
-			const tmpResult = items.value.filter((item: any) => {
+		const displayItems: ComputedRef<any[]> = computed((): any[] =>{	
+			const tmpResult = apiMode.value	? 
+			items.value :
+			items.value.filter((item: any) => {
 				//Any of the field.
 				let returnValue = 0;
 				for(let i in props.headers){
@@ -114,42 +136,71 @@ export default defineComponent({
 		})
 		//Page handlers
 		const nextPage = async(): Promise<void> => {
-			if(currentPage.value+1 < totalPages.value) currentPage.value++;
-			else if(linkToNextSetOfData.value){
-				await grabDataSet(linkToNextSetOfData.value)
-				currentPage.value++
+			if(currentPage.value+1 < totalPages.value){
+				currentPage.value++;
 			}
+			if(!loadedPage.value.has(currentPage.value) && apiMode.value){
+				await processApi()
+				loadedPage.value.add(currentPage.value);
+			}
+			
 		}
 		const previousPage = (): void => {
 			if(currentPage.value-1 >= 0) currentPage.value--;
 		}
-
+		//API mode
+		const loadedPage: Ref<Set<Number>> = ref(new Set()) 
+		const apiMode: ComputedRef<boolean> = computed(()=> props.api && props.api.url ? true : false)
+		const apiInfo: Ref<ApiInfo> = ref({
+			baseUrl: "",
+			fixedUrl: "",
+			count:0,
+			nextUrl:null,
+			previousUrl:null
+		})
+		const apiParams: Ref<ApiParams> = ref({
+			limit: 0,
+			offset: 0,
+			search: ""
+		})
+		onMounted(async() =>{
+			if(apiMode.value){
+				loadedPage.value.add(0);
+				await processApi()
+			}
+				
+		})
+		const processApi = async (): Promise<void> => {
+			calibrateApiInfo()
+			await grabDataSet(props.api.url)
+		}
+		const searchHandle = async (): Promise<void> => {
+			items.value = [];
+			currentPage.value = 0;
+			loadedPage.value.clear();
+			await processApi()
+		}
+		const calibrateApiInfo = (): void => {
+			apiParams.value.limit = itemPerPageModel.value;
+			apiParams.value.offset = currentPage.value * itemPerPageModel.value;
+			apiParams.value.search = props.search;
+			apiInfo.value.baseUrl = props.api.url.split("?")[0]
+			apiInfo.value.fixedUrl = 
+			`${apiInfo.value.baseUrl}?offset=${apiParams.value.offset}&limit=${apiParams.value.limit}&search=${apiParams.value.search}`
+		}
 		const grabDataSet = async(url: string)=>{
 			if(props.api.url){
 				//When api is provided
-				console.log("API mode initialized");
 				loading.value = true;
-				const apiResponse = await fetch(url);
+				const apiResponse = await fetch(apiInfo.value.fixedUrl);
 				const apiResults = await apiResponse.json();
-				//Check if all fields are presented
-				const apiResultsKeys = Object.keys(apiResults);
-				if(apiResultsKeys.length !== 4) throw "Invalid api response"
-				if(!apiResultsKeys.includes(props.api.results)) throw "Invalid api response"
-				if(!apiResultsKeys.includes(props.api.next)) throw "Invalid api response"
-				if(!apiResultsKeys.includes(props.api.previous)) throw "Invalid api response"
-				if(!apiResultsKeys.includes(props.api.count)) throw "Invalid api response"
-
-				items.value = [...items.value, ...apiResults.results];
-				
-				linkToNextSetOfData.value = apiResults.next;
+				apiInfo.value.nextUrl = apiResults[props.api.next];
+				apiInfo.value.count = apiResults[props.api.count];
+				items.value = [...items.value, ...apiResults[props.api.results]];
 				loading.value = false;
 			}
 		}
 
-		onMounted(async() =>{
-			await grabDataSet(props.api.url)
-		})
-	
 		//Sorting
 		const sortState: Ref<any> = ref({})
 		props.headers!.forEach(header => {
@@ -190,7 +241,6 @@ export default defineComponent({
 			
 		}
 
-		
         return {
             headers: props.headers,
             localCssProps, slotExist,
@@ -201,7 +251,8 @@ export default defineComponent({
 			displayItems,
 			currentPage, totalPages,
 			nextPage, previousPage,
-			loading
+			loading, mobileMode,
+			searchHandle
         };
     },
 });

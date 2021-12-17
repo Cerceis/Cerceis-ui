@@ -7,6 +7,7 @@
 	--success: #03c03c;
 	--error: #ff6961;
 	--warning: #FFB449;
+	--activate: #9e9e9e;
 }
 
 [data-theme="dark"] {
@@ -18,4 +19,5 @@
 	--success: #03c03c;
 	--error: #ff6961;
 	--warning: #FFB449;
+	--activate: #9e9e9e;
 }

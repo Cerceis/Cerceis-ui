@@ -23,9 +23,7 @@ export default defineComponent({
 		value:{
 			type: null
 		},
-		modelValue:{
-			type: Array,
-		}
+		modelValue:{}
 	},
     setup(props, {emit}) {
 		//Styles

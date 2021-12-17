@@ -14,8 +14,8 @@
 </template>
  
 <script lang="ts">
-//FLatPanel = tooltips
-import { defineComponent, Ref, ref, PropType, computed, ComputedRef } from "vue";
+//FloatPanel = tooltips
+import { defineComponent, Ref, ref, PropType, computed, ComputedRef, onBeforeUpdate } from "vue";
 
 export interface FloatContentStyle {
     right?: ComputedRef<string>;
@@ -34,23 +34,32 @@ export default defineComponent({
             type: String as PropType<FloatPosition>,
             default: "bottom",
         },
+        forced:{
+            type: Boolean,
+            default: false
+        }
     },
     setup(props) {
         const floatContentStyle: Ref<FloatContentStyle> = ref({});
-        const showContent: Ref<boolean> = ref(false);
+        const showContent: Ref<boolean> = props.forced ? ref(true) : ref(false);
 		const refContainer: Ref<HTMLElement | undefined> = ref();
 		const refContent: Ref<HTMLElement | undefined> = ref();
 		const eventListenerAdded: Ref<boolean> = ref(false);
-
+        const userActivated: Ref<boolean> = ref(false);
+        let forcedClibrated: boolean = false;
+        
         const activateFloatPanel = (e: any): void => {
+            if(props.forced) return
             e.target.tabindex = "-1";
             e.target.focus();
+            userActivated.value = true
             //Add blur event
 			const onBlurEventFunc = (targetE: any) => {
 				if(!refContainer.value?.contains(targetE.target)){
 					deactivateFloatPanel(targetE.target);
 					window.removeEventListener("click", onBlurEventFunc);
 					eventListenerAdded.value = false;
+                    userActivated.value = false;
 				}
 			}
 			if(!eventListenerAdded.value){
@@ -58,8 +67,11 @@ export default defineComponent({
 				eventListenerAdded.value = true;
 			}
 			showContent.value = true;
-            
-			//Bounding is still buggy for "top" , incomplete for "left", done in "right", "bottom"
+            calibratePosition()
+        };
+
+        //Bounding is still buggy for "top" , incomplete for "left", done in "right", "bottom"
+        const calibratePosition = (): void =>{
             switch (props.pos) {
                 case "top":
                     floatContentStyle.value.marginBottom = ".5em";
@@ -86,6 +98,7 @@ export default defineComponent({
 						if(offScreenValue > 0) return `-${offScreenValue}px`;
 						return `0px`;
 					})
+                    
                     floatContentStyle.value.left = computed((): string =>{
 						const bounds: any = refContent.value?.getBoundingClientRect()
 						const offScreenValue: number = (bounds?.width - bounds?.x);
@@ -108,7 +121,7 @@ export default defineComponent({
 						//If the new position won't overflow the opposite direction
 						if(bounds?.width + offScreenValue > window.innerWidth) return `-${bounds.x}px`;
 						if(offScreenValue > 0) return `-${offScreenValue}px`;
- 						return `${e.target.clientWidth}px`;
+ 						return `${refContainer.value?.clientWidth}px`;
 					}) 
                     break;
                 case "bottom":
@@ -117,7 +130,7 @@ export default defineComponent({
 						const bounds: any = refContent.value?.getBoundingClientRect()
 						const offScreenValue: number = (bounds?.y + bounds?.height) - window.innerHeight;
 						if(offScreenValue > 0) return `-${offScreenValue}px`;
-						return `${e.target.clientHeight}px`;
+						return `${refContainer.value?.clientHeight}px`;
 					})
 					floatContentStyle.value.left = computed((): string =>{
 						const bounds: any = refContent.value?.getBoundingClientRect()
@@ -128,12 +141,23 @@ export default defineComponent({
 					}) 
                     break;
             }
-           
-        };
+        }
+
         const deactivateFloatPanel = (e: any): void => {
             showContent.value = false;
         };
 
+        onBeforeUpdate(()=>{
+            if(!forcedClibrated && props.forced){
+                calibratePosition();
+                forcedClibrated = true
+            }else{
+                calibratePosition();   
+                if(userActivated.value)
+                    showContent.value = true;
+            }
+        })
+        
         return {
             activateFloatPanel,
             deactivateFloatPanel,

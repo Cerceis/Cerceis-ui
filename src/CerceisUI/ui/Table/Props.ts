@@ -26,13 +26,13 @@ export const Props = {
 		type: String,
 		default: ""
 	},
+	mobileBreakPoint:{
+		type: Number,
+		default: 350
+	},
 	itemPerPage:{
 		type: Array as PropType<ItemPerPage[]>,
 		default:[
-			{
-				label:"全部",
-				value:-1
-			},
 			{
 				label:'10',
 				value: 10
@@ -53,32 +53,6 @@ export const Props = {
 	},
 	api:{
 		type: Object as PropType<ApiOptions>,
-		url:{
-			type: String,
-			required: true
-		},
-		next:{
-			type: String,
-			default:"next"
-		},
-		previous:{
-			type: String,
-			default:"previous"
-		},
-		count:{
-			type: String,
-			default:"count"
-		},
-		results:{
-			type: String,
-			default:"results"
-		},
-		default:{
-			url:null,
-			next:"next",
-			previous:"previous",
-			count:"count",
-			results:"results"
-		}
+		default: null
 	}
 }

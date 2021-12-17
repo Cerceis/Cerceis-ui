@@ -4,7 +4,6 @@ UI component library made for Vue3, written in Typescript. Nothing is being buil
 # Prerequisition
 - Vue 3 
 - Typescript
-- SCSS
 
 # How to use
 
@@ -26,7 +25,7 @@ Vue runs in singleton, if you are importing directly from another project, you w
 		config.resolve.alias.set( 'vue', path.resolve('./node_modules/vue'))    
 	},  
 
-The entire library runs on a theme system. Which allow more consistency and easier dark mode support. If you have used the method above to import the library, it also automaically imports the default themes which you can find in ***"CerceisUI/css/globalStyle.css"***.
+The entire library runs on a theme system. Which allow more consistency and easier dark mode support. If you have used the method above to import the library, it also automaically imports the default themes which you can find in ***"CerceisUI/css/theme.css"***.
 
 	:root {
 		--bg: #ffffff;
