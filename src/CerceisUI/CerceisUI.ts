@@ -17,6 +17,8 @@ import Dialog from "./ui/Dialog/Dialog.vue"
 import ChipGroup from "./ui/ChipGroup/ChipGroup.vue"
 import * as notification from "./ui/Notification/NotificationService"
 import Notification from "./ui/Notification/Notification.vue"
+import DatePicker from "./ui/DatePicker/DatePicker.vue"
+import TimePicker from "./ui/TimePicker/TimePicker.vue"
 //Styles
 import "./css/globalStyle.css"
 import "./css/theme.css"
@@ -49,5 +51,7 @@ export default {
 		app.component("c-chip-group", ChipGroup);
 		app.component("c-notification", Notification);
 		app.provide('notificationService', notification);
+		app.component("c-date-picker", DatePicker);
+		app.component("c-time-picker", TimePicker);
 	}
 }

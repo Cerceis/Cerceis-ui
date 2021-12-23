@@ -53,23 +53,35 @@ The entire library runs on a theme system. Which allow more consistency and easi
 Above are the default colors, you can change as you wish.
 
 # Components
-- Button
-- ChipGroup
-- Dialog
-- FloatPanel (tooltip)
-- Icon
-- Notification
-- Table/DataTable
-- Avatar
-- Checkbox
-- Container
-- Divider
-- Input
-- LoaderCircular
-- LoeaderLinear
-- Select
-- Sidebar
-- Switch
+|Name|Status|Documentation|
+|--|--|--|
+|Alert|In Progress|x|
+|Avatar|Completed|x|
+|Button|Completed|x|
+|Checkbox|Completed|x|
+|ChipGroup|Completed|x|
+|Container|Completed|x|
+|DatePicker|Completed|x|
+|Dialog|Completed|x|
+|Divider|Completed|x|
+|FloatPanel (tooltip)|Completed|x|
+|Icon|Completed|o|
+|Input|Completed|x|
+|LoaderCircular|Completed|x|
+|LoaderLinear|Completed|x|
+|Notification|Completed|o|
+|Select|Completed|x|
+|Sidebar|Completed|x|
+|Switch|Completed|x|
+|Table/DataTable|Completed|o|
+|TimePicker|Completed|o|
+
+# Versions
+|Name|Release Date|Changelog|
+|--|--|--|
+|v1.1|2021-12-23| Added **TimePicker**, **DatePicker**, **Notification**. Updated documentation. Updated **Table**'s **ApiMode**.|
+|v1.0|2021-12-17| First release. Changed documentation format. Minor bug fixed.|
+|v0.5|2021-11-30| Alpha release.
 
 # FAQ
 - How to add/use icon ?  
@@ -77,8 +89,8 @@ Above are the default colors, you can change as you wish.
 	drop your icon files (svg format only) into the "icons" folder located in ***"CerceisUI/icons"*** and you can then use it by refering to its filename **without file extension**.
 	### Example
 	```
-		//If your icon name is "001-folderIcon.svg"
+    //If your icon name is "001-folderIcon.svg"
 
-		<c-icon name="001-folderIcon"/>
+    <c-icon name="001-folderIcon"/>
 	```
 	

@@ -1,5 +1,5 @@
 <template>
-    <div class="CLoaderLinearContainer" :style="localCssProps">
+    <div :class="`${fixed ? 'fixedContainer' : 'CLoaderLinearContainer'}`" :style="localCssProps">
         <div class="CLoaderLinearInner"></div>
     </div>
 </template>
@@ -17,6 +17,10 @@ export default defineComponent({
 		height:{
 			type: String,
 			default: "5px",
+		},
+		fixed:{ //This will fix the loader to the top
+			type:Boolean,
+			default: false
 		}
     },
     setup(props) {
@@ -30,7 +34,8 @@ export default defineComponent({
 
 
 		return{
-			localCssProps
+			localCssProps,
+			fixed: props.fixed
 		}
 	},
 });
@@ -39,6 +44,15 @@ export default defineComponent({
 <style lang="scss" scoped>
 .CLoaderLinearContainer {
 	position:relative;
+	width:100%;
+	height:var(--height);
+	backdrop-filter: brightness(0.5);
+	overflow:hidden;
+}
+.fixedContainer{
+	position:fixed;
+	top:0;
+	left:0;
 	width:100%;
 	height:var(--height);
 	backdrop-filter: brightness(0.5);

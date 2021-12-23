@@ -20,7 +20,7 @@ body{
 }
 
 .shadow{
-	box-shadow: 0 0 5px 1px black;
+	box-shadow: 0 0 5px 1px rgba(0,0,0,.5);
 }
 
 /* Typography */
@@ -41,9 +41,20 @@ body{
 .grid{
 	display: grid;
 }
-.flex{
-	display: flex;
-}
+/* Flex */
+.flex{ display: flex; }
+.f-1{ flex: 1; }
+.f-2{ flex: 2; }
+.f-3{ flex: 3; }
+.f-4{ flex: 4; }
+.f-5{ flex: 5; }
+.f-6{ flex: 6; }
+.f-7{ flex: 7; }
+.f-8{ flex: 8; }
+.f-9{ flex: 9; }
+.f-10{ flex: 10; }
+.f-11{ flex: 11; }
+.f-12{ flex: 12; }
 .center{ 
 	display: grid;
 	place-items: center;
@@ -122,4 +133,7 @@ body{
 
 .expand{
 	width:100% !important;
+}
+.bold{
+	font-weight: bold;
 }

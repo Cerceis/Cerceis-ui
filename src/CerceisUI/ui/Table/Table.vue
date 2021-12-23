@@ -4,7 +4,7 @@
 		<div v-if="mobileMode">
 			<slot name="mobile"
 				v-for="(item, itemIndex) in displayItems" :key=itemIndex 
-				:item=item
+				:item=item :index=itemIndex
 			/>
 		</div>
 		<table v-else>

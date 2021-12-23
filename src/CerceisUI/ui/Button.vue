@@ -4,14 +4,18 @@
         :class="`btn ${sizeClass}`"
         :style="buttonStyle"
     >
-        <slot />
+        <span class="btnLabelContent">
+            <slot />
+        </span>
     </button>
 	<div 
 		v-else
 		:class="`chip ${sizeClass}`"
         :style="buttonStyle"
 	>
-		<slot />
+        <span class="btnLabelContent">
+		    <slot />
+        </span>
 	</div>
 </template>
  

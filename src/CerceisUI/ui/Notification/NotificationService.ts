@@ -43,7 +43,7 @@ export const notificationList: Ref<Notification[]> = ref([]);
 export const popNotificationList: Ref<Notification[]> = ref([]);
 export const currentPopNotification: ComputedRef<Notification> = computed(()=> popNotificationList.value[0])
 
-export const add = (notification: Notification): void =>{
+export const add = (notification: Notification): Notification =>{
     notification.id = GenerateObjectId();
     notification.datetime = (new Date).toLocaleString();
     if(notification.pop){
@@ -54,7 +54,7 @@ export const add = (notification: Notification): void =>{
     else{
         notificationList.value = [notification, ...notificationList.value];
     }
-    
+    return notification
 }
 
 export const clear = (): void =>{
