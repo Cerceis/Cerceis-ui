@@ -76,10 +76,37 @@ Above are the default colors, you can change as you wish.
 |Table/DataTable|Completed|o|
 |TimePicker|Completed|o|
 
+# Dark mode implementations
+This library provides an extremly easy way to implement dark mode.
+Code below shows a trigger that toggle between "light" & "dark" theme.  
+*Example written with TypeScript in Composition api.
+```
+//This could be a v-model of any input (Ex. Check box/Switch)
+const checked: Ref<boolean> = ref(false);
+const toggleDarkMode = (mode: ThemeMode = null): void => {
+	const body = document.querySelector("body");
+	if(mode) 
+		body!.dataset.theme = mode
+	else
+		body!.dataset.theme = checked.value ? "dark" : "light";
+	//To persist dark mode on reload, we save it on localStoage.
+	window.localStorage.setItem("theme", body!.dataset.theme)
+};
+//Automatically switch mode on reload.
+onMounted(()=>{
+	//Check theme settings
+	const currentTheme: string | null = window.localStorage.getItem("theme");
+	if(currentTheme && (currentTheme === "dark" || currentTheme === "light")){
+		toggleDarkMode(currentTheme);
+		checked.value = currentTheme === "dark" ? true : false;
+	}
+})
+```
+
 # Versions
 |Name|Release Date|Changelog|
 |--|--|--|
-|v1.1|2021-12-23| Added **TimePicker**, **DatePicker**, **Notification**. Updated documentation. Updated **Table**'s **ApiMode**.|
+|v1.1|2021-12-23| Added **TimePicker**, **DatePicker**, **Notification**. Updated documentation. Updated **Table**'s **ApiMode**. Added **Dark mode** documentation.|
 |v1.0|2021-12-17| First release. Changed documentation format. Minor bug fixed.|
 |v0.5|2021-11-30| Alpha release.
 
