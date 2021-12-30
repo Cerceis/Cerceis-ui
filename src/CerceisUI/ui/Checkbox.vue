@@ -13,7 +13,7 @@
  
 <script lang="ts">
 import { defineComponent, ref, Ref, computed } from "vue";
-import { GenerateObjectId } from "lib/GenerateObjectId/generate-objectid";
+import { GenerateObjectId } from "./shared/Functions"
 
 export default defineComponent({
     props: {

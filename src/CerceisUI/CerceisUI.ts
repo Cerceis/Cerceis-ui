@@ -19,6 +19,8 @@ import * as notification from "./ui/Notification/NotificationService"
 import Notification from "./ui/Notification/Notification.vue"
 import DatePicker from "./ui/DatePicker/DatePicker.vue"
 import TimePicker from "./ui/TimePicker/TimePicker.vue"
+import Editor from "./ui/Editor/Editor.vue"
+import Window from "./ui/Window/Window.vue"
 //Styles
 import "./css/globalStyle.css"
 import "./css/theme.css"
@@ -53,5 +55,7 @@ export default {
 		app.provide('notificationService', notification);
 		app.component("c-date-picker", DatePicker);
 		app.component("c-time-picker", TimePicker);
+		app.component("c-editor", Editor);
+		app.component("c-window", Window);
 	}
 }

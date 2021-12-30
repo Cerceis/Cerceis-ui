@@ -6,7 +6,6 @@
  
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { RandomInt } from "lib/RandomInt/random-int";
 
 type dimension = "sm" | "md" | "lg" 
 interface AvartarDimension{
@@ -31,6 +30,11 @@ export default defineComponent({
 		}
 	},
 	setup(props) {
+		const RandomInt = (min: number, max: number): number =>{
+			let result: number = 0;
+			result = Math.floor(Math.random() * (max - min))+ min
+			return result
+		}
 		//Currently support initial only
 		//Will support images in near future.
 		const dimension: AvartarDimension = {

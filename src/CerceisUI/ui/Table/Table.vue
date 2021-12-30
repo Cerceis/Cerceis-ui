@@ -70,7 +70,6 @@ import { Props } from "./Props";
 import { ApiParams, ApiInfo } from "./Types"
 
 //During ApiMode, search does not work
-
 export default defineComponent({
     props: Props,
     setup(props, { slots }) {
@@ -229,12 +228,12 @@ export default defineComponent({
 			switch(sortState.value[targetHeader]){
 				case "asc":
 					items.value.sort((a: any, b: any): number => 
-						a[targetHeader].localeCompare(b[targetHeader])
+						String(a[targetHeader]).localeCompare(String(b[targetHeader]))
 					)
 					break
 				case "desc":
 					items.value.sort((a: any, b: any): number => 
-						b[targetHeader].localeCompare(a[targetHeader])
+						String(b[targetHeader]).localeCompare(String(a[targetHeader]))
 					)
 					break
 			}

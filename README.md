@@ -53,6 +53,7 @@ The entire library runs on a theme system. Which allow more consistency and easi
 Above are the default colors, you can change as you wish.
 
 # Components
+*Documentations are located in ***README.md*** of each component's folder. ***CerceisUI/ui/\****
 |Name|Status|Documentation|
 |--|--|--|
 |Alert|In Progress|x|
@@ -103,6 +104,9 @@ onMounted(()=>{
 })
 ```
 
+# CSS library
+This UI library also comes with a global CSS library which being imported automatically. It's also needed for all the component style to work. But it also can be used when needed. Documentation and more info located in CerceisUI/css/README.md
+
 # Versions
 |Name|Release Date|Changelog|
 |--|--|--|
@@ -120,4 +124,3 @@ onMounted(()=>{
 
     <c-icon name="001-folderIcon"/>
 	```
-	
